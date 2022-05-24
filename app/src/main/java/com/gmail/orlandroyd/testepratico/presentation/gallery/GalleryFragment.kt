@@ -1,4 +1,4 @@
-package com.gmail.orlandroyd.testepratico.ui.gallery
+package com.gmail.orlandroyd.testepratico.presentation.gallery
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.gmail.orlandroyd.testepratico.ui.slideshow
+package com.gmail.orlandroyd.testepratico.presentation.slideshow
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
