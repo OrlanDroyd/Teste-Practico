@@ -9,7 +9,11 @@
         android:id="@+id/nav_my_products"
         android:name="com.gmail.orlandroyd.testepratico.presentation.my_products.MyProductsFragment"
         android:label="@string/menu_my_products"
-        tools:layout="@layout/fragment_my_products" />
+        tools:layout="@layout/fragment_my_products">
+        <action
+            android:id="@+id/action_nav_my_products_to_nav_detail"
+            app:destination="@id/nav_detail" />
+    </fragment>
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.gmail.orlandroyd.testepratico.presentation.profile.ProfileFragment"
@@ -28,9 +32,17 @@
         <action
             android:id="@+id/action_nav_login_to_nav_my_products"
             app:destination="@id/nav_my_products"
-            app:launchSingleTop="true"
             app:popUpTo="@id/nav_login"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_detail"
+        android:name="com.gmail.orlandroyd.testepratico.presentation.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="product"
+            app:argType="com.gmail.orlandroyd.testepratico.domain.model.Product" />
     </fragment>
 
 </navigation>

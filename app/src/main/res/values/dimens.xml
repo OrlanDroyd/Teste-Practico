@@ -6,6 +6,8 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="header">150dp</dimen>
+    <dimen name="thumbnail">250dp</dimen>
+    <dimen name="view_background">80dp</dimen>
     <dimen name="logo">60dp</dimen>
     <!--general spacing-->
     <dimen name="spacing_xxsmall">1dp</dimen>

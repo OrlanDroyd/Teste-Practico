@@ -15,4 +15,6 @@
     <string name="login">Login</string>
     <string name="invalid_username">Campo requerido</string>
     <string name="invalid_password">Campo requerido</string>
+    <string name="error">Error</string>
+    <string name="invalid_credentials">Invalid credentials</string>
 </resources>

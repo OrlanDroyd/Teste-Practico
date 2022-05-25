@@ -66,11 +66,11 @@ constructor(
             viewModelScope.launch {
                 loginRepository.login(password, password)
                     .catch { e ->
-                        delay(2000)
+                        delay(2000) // Only for test
                         _login.send(DataState.error(e.toString()))
                     }
                     .collect {
-                        delay(2000)
+                        delay(2000) // Only for test
                         _login.send(it)
                     }
             }

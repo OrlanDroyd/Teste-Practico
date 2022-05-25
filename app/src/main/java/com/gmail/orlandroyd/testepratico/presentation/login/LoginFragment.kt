@@ -1,6 +1,5 @@
 package com.gmail.orlandroyd.testepratico.presentation.login
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -15,6 +14,7 @@ import com.gmail.orlandroyd.testepratico.databinding.FragmentLoginBinding
 import com.gmail.orlandroyd.testepratico.util.DataState
 import com.gmail.orlandroyd.testepratico.util.setInvisible
 import com.gmail.orlandroyd.testepratico.util.setVisible
+import com.gmail.orlandroyd.testepratico.util.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -28,7 +28,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     // VIEW MODEL
     private val viewModel by viewModels<LoginViewModel>()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,7 +83,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    @SuppressLint("UnsafeRepeatOnLifecycleDetector", "ShowToast")
     private fun setupObservers() {
 
         val username: String = binding.inputUsername.text.toString().trim()
@@ -95,16 +93,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         // using coroutines to collect result
         lifecycleScope.launch {
-
             viewModel.login.collect {
-
                 when (it.status) {
 
                     DataState.Status.SUCCESS -> {
                         if (it.data?.status == "fail") {
                             displayProgressBar(false)
-                            Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT)
-                                .show()
+                            context.toast(getString(R.string.invalid_credentials))
                         } else if (it.data?.status == "success") {
                             displayProgressBar(false)
                             findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavMyProducts())
@@ -113,11 +108,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                     DataState.Status.ERROR -> {
                         displayProgressBar(false)
-                        Toast.makeText(
-                            context,
-                            it.message ?: "Invalid credentials",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        context.toast(it.message ?: getString(R.string.invalid_credentials))
                     }
 
                     DataState.Status.LOADING -> {
@@ -126,7 +117,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                     DataState.Status.FAILURE -> {
                         displayProgressBar(false)
-                        Toast.makeText(context, it.message ?: "Error", Toast.LENGTH_SHORT).show()
+                        context.toast(it.message ?: getString(R.string.error))
                     }
                 }
             }
