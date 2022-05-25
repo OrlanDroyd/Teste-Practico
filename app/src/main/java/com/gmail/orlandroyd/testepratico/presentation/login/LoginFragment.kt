@@ -107,7 +107,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 .show()
                         } else if (it.data?.status == "success") {
                             displayProgressBar(false)
-                            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToNavHome())
+                            findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavMyProducts())
                         }
                     }
 
