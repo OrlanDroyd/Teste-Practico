@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
+    private lateinit var listener: NavController.OnDestinationChangedListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawerLayout = binding.drawerLayout
         navView = binding.navView
+        navController = findNavController(R.id.nav_host_fragment_content_main)
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -49,27 +51,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             ), drawerLayout
         )
 
-        navController = findNavController(R.id.nav_host_fragment_content_main)
-
         // Navigation
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navView.setNavigationItemSelectedListener(this)
 
         // Setup login screen
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.nav_login) {
-                supportActionBar!!.hide()
-                drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
-            } else {
-                supportActionBar!!.show()
-                drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+        listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.nav_login -> {
+                    supportActionBar!!.hide()
+                    drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+                }
+                R.id.nav_detail -> {
+                    drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+                }
+                else -> {
+                    supportActionBar!!.show()
+                    drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+                    navController.clearBackStack(R.id.nav_my_products)
+                }
             }
+
         }
 
         // NavHeader
         setupNavHeader()
-
     }
 
     private fun setupNavHeader() {
@@ -97,21 +104,33 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    // TODO: CHECK
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         item.isChecked = true
         drawerLayout.closeDrawers()
-        when (item.itemId) {
-            R.id.nav_my_products -> {
-                navController.navigate(R.id.nav_my_products);
-            }
-            R.id.nav_config -> {
-                navController.navigate(R.id.nav_config);
-            }
-            R.id.nav_logout -> {
-                Toast.makeText(applicationContext, "LOGOUT", Toast.LENGTH_SHORT).show()
+        if (navController.currentDestination!!.id != item.itemId) {
+            when (item.itemId) {
+                R.id.nav_my_products -> {
+                    navController.navigate(R.id.nav_my_products)
+                }
+                R.id.nav_config -> {
+                    navController.navigate(R.id.nav_config)
+                }
+                R.id.nav_logout -> {
+                    Toast.makeText(applicationContext, "LOGOUT", Toast.LENGTH_SHORT).show()
+                }
             }
         }
         return true
     }
+
+    override fun onResume() {
+        super.onResume()
+        navController.addOnDestinationChangedListener(listener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        navController.removeOnDestinationChangedListener(listener)
+    }
+
 }

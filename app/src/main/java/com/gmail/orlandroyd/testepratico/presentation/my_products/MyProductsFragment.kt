@@ -39,11 +39,10 @@ class MyProductsFragment : Fragment(R.layout.fragment_my_products),
         binding.recycler.setHasFixedSize(true)
         productAdapter = MyProductAdapter(this)
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.products.collect {
                     when (it.status) {
-
                         DataState.Status.SUCCESS -> {
                             displayProgressBar(false)
                             productAdapter.submitList(it.data)

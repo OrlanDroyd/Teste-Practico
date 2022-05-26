@@ -1,6 +1,6 @@
 package com.gmail.orlandroyd.testepratico.util
 
-data class DataState<out T>(val status: Status, val data: T?, val message: String?) {
+data class DataState<out T>(val status: Status = Status.LOADING, val data: T? = null, val message: String? = null) {
 
     enum class Status {
         SUCCESS,

@@ -76,7 +76,9 @@ dependencies {
     def maps_ktx_version = '3.3.0'
     implementation "com.google.maps.android:android-maps-utils:$maps_version"
     implementation "com.google.maps.android:maps-utils-ktx:$maps_ktx_version"
-
+    // Paging 3
+    def paging_version = "3.1.1"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
     // TEST
     // Local Unit Tests
     testImplementation 'junit:junit:4.13.2'
