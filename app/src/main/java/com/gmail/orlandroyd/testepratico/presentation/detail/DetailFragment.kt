@@ -1,38 +1,85 @@
 package com.gmail.orlandroyd.testepratico.presentation.detail
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.gmail.orlandroyd.testepratico.R
 import com.gmail.orlandroyd.testepratico.databinding.FragmentDetailBinding
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
 
-class DetailFragment : Fragment() {
 
+class DetailFragment : Fragment(R.layout.fragment_detail) {
+
+    // BINDING
     private var _binding: FragmentDetailBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val galleryViewModel =
-            ViewModelProvider(this).get(DetailViewModel::class.java)
+    // ARGS
+    private val args by navArgs<DetailFragmentArgs>()
 
-        _binding = FragmentDetailBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+    // MAP
+    private lateinit var googleMap: GoogleMap
 
-        val textView: TextView = binding.textGallery
-        galleryViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // init binding
+        _binding = FragmentDetailBinding.bind(view)
+
+        setupView()
+
+        binding.fabBuy.setOnClickListener {
+            val action = DetailFragmentDirections.actionNavDetailToConfirmDialogFragment()
+            findNavController().navigate(action)
         }
-        return root
+
+        // MapView
+        val mapFragment: SupportMapFragment =
+            childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
+        mapFragment.getMapAsync() { map ->
+
+            googleMap = map
+
+            if (ActivityCompat.checkSelfPermission(
+                    binding.root.context, Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    binding.root.context, Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                activity?.let {
+                    ActivityCompat.requestPermissions(
+                        it, arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ), 101
+                    )
+                }
+            } else {
+                googleMap.isMyLocationEnabled = true
+            }
+        }
+    }
+
+    private fun setupView() {
+        binding.apply {
+            val product = args.product
+
+            Glide.with(this@DetailFragment)
+                .load(product.thumbnail)
+                .into(imageView)
+
+            tvTitleDetails.text = product.title
+
+            tvDetails.text = product.subtitle
+
+        }
     }
 
     override fun onDestroyView() {

@@ -17,4 +17,12 @@
     <string name="invalid_password">Required</string>
     <string name="error">Error</string>
     <string name="invalid_credentials">Invalid credentials</string>
+    <string name="thumbnail">Thumbnail</string>
+    <string name="map">Map</string>
+    <string name="details">Details</string>
+    <string name="buy">Buy</string>
+    <string name="confirm">Confirm</string>
+    <string name="dialog_msg">Do you want this product?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

@@ -9,6 +9,8 @@
     <dimen name="thumbnail">250dp</dimen>
     <dimen name="view_background">80dp</dimen>
     <dimen name="logo">60dp</dimen>
+    <dimen name="thumbnail_detail_width">100dp</dimen>
+    <dimen name="thumbnail_detail_height">150dp</dimen>
     <!--general spacing-->
     <dimen name="spacing_xxsmall">1dp</dimen>
     <dimen name="spacing_xsmall">2dp</dimen>

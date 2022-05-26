@@ -92,6 +92,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    private fun isValidDestination(destination: Int) =
+        destination != navController.currentDestination!!.id
+
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
@@ -107,7 +110,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         item.isChecked = true
         drawerLayout.closeDrawers()
-        if (navController.currentDestination!!.id != item.itemId) {
+        if (isValidDestination(item.itemId)) {
             when (item.itemId) {
                 R.id.nav_my_products -> {
                     navController.navigate(R.id.nav_my_products)
