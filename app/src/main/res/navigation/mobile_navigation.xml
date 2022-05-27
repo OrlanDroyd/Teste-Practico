@@ -51,7 +51,7 @@
         android:id="@+id/confirm_dialog_fragment"
         android:name="com.gmail.orlandroyd.testepratico.presentation.detail.ConfirmDialogFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_confirm_dialog" >
+        tools:layout="@layout/fragment_confirm_dialog">
         <action
             android:id="@+id/action_confirm_dialog_fragment_to_nav_my_products"
             app:destination="@id/nav_my_products"

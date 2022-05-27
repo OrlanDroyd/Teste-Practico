@@ -15,7 +15,7 @@ class LoginRepositoryImpl @Inject constructor() : LoginRepository {
 
     // Only a placeholder to simulate login action
     override suspend fun login(username: String, password: String): Flow<DataState<User>> = flow {
-        if (username == "a" && password == "a") {
+        if (username == "admin" && password == "admin") {
             emit(
                 DataState.success(
                     User(

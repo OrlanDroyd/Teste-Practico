@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = binding.navView.getHeaderView(0)
         val tvUserName = navigationView.findViewById<TextView>(R.id.tv_username)
         // TODO: get from preferences
-        tvUserName.text = "Admin"
+        tvUserName.text = "Hello user"
         // onClick profile image
         val imgAvatar = navigationView.findViewById<ImageView>(R.id.img_avatar)
         imgAvatar.setOnClickListener {
