@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -17,6 +16,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gmail.orlandroyd.testepratico.databinding.ActivityMainBinding
+import com.gmail.orlandroyd.testepratico.util.toast
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -82,11 +84,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setupNavHeader() {
         val navigationView = binding.navView.getHeaderView(0)
         val tvUserName = navigationView.findViewById<TextView>(R.id.tv_username)
-        // get from preferences
+        // TODO: get from preferences
         tvUserName.text = "Admin"
         // onClick profile image
         val imgAvatar = navigationView.findViewById<ImageView>(R.id.img_avatar)
         imgAvatar.setOnClickListener {
+            navController.popBackStack(R.id.nav_my_products, false)
             navController.navigate(R.id.nav_profile)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
@@ -113,17 +116,43 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (isValidDestination(item.itemId)) {
             when (item.itemId) {
                 R.id.nav_my_products -> {
-                    navController.navigate(R.id.nav_my_products)
+                    navController.popBackStack(R.id.nav_my_products, false)
                 }
                 R.id.nav_config -> {
+                    navController.popBackStack(R.id.nav_my_products, false)
                     navController.navigate(R.id.nav_config)
                 }
                 R.id.nav_logout -> {
-                    Toast.makeText(applicationContext, "LOGOUT", Toast.LENGTH_SHORT).show()
+                    logout()
                 }
             }
         }
         return true
+    }
+
+    private fun logout() {
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        // Build a GoogleSignInClient with the options specified by gso.
+        val mGoogleSignInClient = GoogleSignIn.getClient(binding.root.context, gso)
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        val account = GoogleSignIn.getLastSignedInAccount(binding.root.context)
+        if (account != null) {
+            mGoogleSignInClient.signOut()
+                .addOnCompleteListener {
+                    toast("Successfully Signed Out (Google)")
+                    navController.popBackStack()
+                    navController.navigate(R.id.nav_login)
+                }
+        } else {
+            toast("Successfully Signed Out (email)")
+            navController.popBackStack()
+            navController.navigate(R.id.nav_login)
+        }
     }
 
     override fun onResume() {

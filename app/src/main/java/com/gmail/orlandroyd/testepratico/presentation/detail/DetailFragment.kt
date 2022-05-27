@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -13,6 +14,7 @@ import com.gmail.orlandroyd.testepratico.R
 import com.gmail.orlandroyd.testepratico.databinding.FragmentDetailBinding
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.maps.android.ktx.awaitMap
 
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
@@ -41,11 +43,12 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
 
         // MapView
-        val mapFragment: SupportMapFragment =
-            childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
-        mapFragment.getMapAsync() { map ->
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.mapView) as? SupportMapFragment
 
-            googleMap = map
+        lifecycle.coroutineScope.launchWhenCreated {
+
+            val googleMap = mapFragment?.awaitMap()
 
             if (ActivityCompat.checkSelfPermission(
                     binding.root.context, Manifest.permission.ACCESS_FINE_LOCATION
@@ -62,7 +65,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                     )
                 }
             } else {
-                googleMap.isMyLocationEnabled = true
+                googleMap?.isMyLocationEnabled = true
             }
         }
     }
